@@ -1,0 +1,31 @@
+service: botline
+
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    BOT_TOKEN: ${env:BOT_TOKEN}
+    CHAT_ID: ${env:CHAT_ID}
+
+functions:
+  notify:
+    handler: dist/handler.handler
+    events:
+      - httpApi:
+          path: /notify
+          method: post
+
+plugins:
+  - serverless-esbuild
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    target: node20
+    sourcemap: false
+    exclude:
+      - aws-sdk
