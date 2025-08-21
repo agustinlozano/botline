@@ -4,6 +4,9 @@
   "description": "A lambda to hotline myself",
   "main": "index.js",
   "scripts": {
+    "build": "node build.mjs",
+    "deploy": "pnpm build && serverless deploy",
+    "dev": "serverless deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +14,10 @@
   "license": "ISC",
   "packageManager": "pnpm@10.12.3",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^22.5.0",
+    "esbuild": "^0.23.1",
+    "serverless-esbuild": "^1.52.1",
     "typescript": "^5.9.2"
   }
 }
