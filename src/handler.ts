@@ -91,8 +91,9 @@ export const handler = async (
     // Get environment variables
     const botToken = process.env.BOT_TOKEN;
     const chatId = process.env.CHAT_ID;
+    const requestToken = process.env.REQUEST_TOKEN;
 
-    if (!botToken || !chatId) {
+    if (!botToken || !chatId || !requestToken) {
       return {
         statusCode: 500,
         headers: {
@@ -101,7 +102,7 @@ export const handler = async (
         body: JSON.stringify({
           ok: false,
           error:
-            "Missing required environment variables: BOT_TOKEN and/or CHAT_ID",
+            "Missing required environment variables: BOT_TOKEN, CHAT_ID and/or REQUEST_TOKEN",
         }),
       };
     }
@@ -119,6 +120,21 @@ export const handler = async (
         body: JSON.stringify({
           ok: false,
           error: "Invalid JSON in request body",
+        }),
+      };
+    }
+
+    // Validate request token
+    const providedToken = event.headers["x-request-token"] || requestBody.token;
+    if (!providedToken || providedToken !== requestToken) {
+      return {
+        statusCode: 401,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ok: false,
+          error: "Unauthorized: Invalid or missing request token",
         }),
       };
     }
