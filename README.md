@@ -53,7 +53,16 @@ Create a `.env` file in the project root:
 ```bash
 BOT_TOKEN=your_telegram_bot_token_here
 CHAT_ID=your_chat_id_here
+REQUEST_TOKEN=your_secure_token_here
 ```
+
+You can generate a secure token using:
+
+```bash
+openssl rand -hex 32
+```
+
+Set the output as your `REQUEST_TOKEN` value.
 
 **Important:** Make sure your `.env` file is in `.gitignore` to avoid committing sensitive data.
 
@@ -75,6 +84,49 @@ After deployment, you'll get an API Gateway endpoint. Send POST requests to:
 
 ```
 POST https://your-api-id.execute-api.us-east-1.amazonaws.com/notify
+```
+
+#### Token Validation
+
+All requests must include a valid token for authentication. You can provide the token in either:
+
+- The `x-request-token` header
+- The `token` field in the request body
+
+Example with header:
+
+```bash
+curl -X POST https://your-api-id.execute-api.us-east-1.amazonaws.com/notify \
+  -H "Content-Type: application/json" \
+  -H "x-request-token: your_secure_token_here" \
+  -d '{
+    "service": "user-service",
+    "error": "authentication_failed",
+    "message": "Invalid JWT token provided",
+    "level": "warning",
+    "payload": {
+      "user_id": "12345",
+      "ip": "192.168.1.100"
+    }
+  }'
+```
+
+Or with token in body:
+
+```bash
+curl -X POST https://your-api-id.execute-api.us-east-1.amazonaws.com/notify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "service": "user-service",
+    "error": "authentication_failed",
+    "message": "Invalid JWT token provided",
+    "level": "warning",
+    "token": "your_secure_token_here",
+    "payload": {
+      "user_id": "12345",
+      "ip": "192.168.1.100"
+    }
+  }'
 ```
 
 ### Request Format
@@ -130,7 +182,16 @@ curl -X POST https://your-api-id.execute-api.us-east-1.amazonaws.com/notify \
 { "ok": true }
 ```
 
-**Error:**
+**Error (invalid token):**
+
+```json
+{
+  "ok": false,
+  "error": "Unauthorized: Invalid or missing request token"
+}
+```
+
+**Error (validation):**
 
 ```json
 {
@@ -197,6 +258,7 @@ The service handles various error scenarios:
 
 - `BOT_TOKEN`: Your Telegram bot token from BotFather
 - `CHAT_ID`: The chat ID where notifications should be sent
+- `REQUEST_TOKEN`: Secure token required for API requests
 
 ### AWS Configuration
 
