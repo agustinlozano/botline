@@ -2,4 +2,7 @@
 /.env*
 /.build
 /dist
+/.serverless
 
+initial-prompt.md
+.DS_Store
