@@ -9,6 +9,7 @@ provider:
   environment:
     BOT_TOKEN: ${env:BOT_TOKEN}
     CHAT_ID: ${env:CHAT_ID}
+    REQUEST_TOKEN: ${env:REQUEST_TOKEN}
 
 functions:
   notify:
