@@ -11,6 +11,12 @@ export const handler = async (
     const chatId = process.env.CHAT_ID;
     const requestToken = process.env.REQUEST_TOKEN;
 
+    console.log("Environment Variables", {
+      botToken,
+      chatId,
+      requestToken,
+    });
+
     if (!botToken || !chatId || !requestToken) {
       return {
         statusCode: 500,
@@ -57,8 +63,11 @@ export const handler = async (
       };
     }
 
+    console.log("ℹ️ Request Body", requestBody);
+
     // Validate request
     const validation = validateNotificationRequest(requestBody);
+
     if (!validation.valid) {
       return {
         statusCode: 400,
