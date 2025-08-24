@@ -23,12 +23,13 @@ export function validateNotificationRequest(body: any): {
     };
   }
 
-  if (!error || typeof error !== "string") {
-    return {
-      valid: false,
-      error: 'Field "error" is required and must be a string',
-    };
-  }
+  // We don't have to validate "error" field
+  // if (!error || typeof error !== "string") {
+  //   return {
+  //     valid: false,
+  //     error: 'Field "error" is required and must be a string',
+  //   };
+  // }
 
   if (!message || typeof message !== "string") {
     return {
