@@ -47,8 +47,8 @@ export class TelegramNotificationService {
     let msg = `${emoji} <b>[${escapeHtml(
       data.level.toUpperCase()
     )}]</b> from <b>${escapeHtml(data.service)}</b>\n\n`;
-    msg += `<b>Error:</b> ${escapeHtml(data.error)}\n`;
-    msg += `<b>Message:</b> ${escapeHtml(data.message)}\n`;
+    msg += data.error ? `<b>Error:</b> ${escapeHtml(data.error)}\n` : "";
+    msg += `<b>Message:</b> ${data.message}\n`;
     msg += `<b>Timestamp:</b> ${escapeHtml(timestamp)}\n`;
 
     if (data.payload) {
